@@ -1,8 +1,8 @@
 {
     "Lua.workspace.library": [
-        //"C:\\Users\\knife\\Downloads\\Moose(2).lua",
-        "C:\\Users\\knife\\Desktop\\LUA-addons",
-        "C:\\Users\\knife\\Desktop\\LUA-addons\\Moose_Include-2.9.14"
+        //"C:\\Users\\knife\\Desktop\\LUA-addons",
+        //"C:\\Users\\knife\\Desktop\\LUA-addons\\Moose_Include-2.9.14",
+        "LUA_Libraries"
     ],
     "Lua.diagnostics.globals": [
         "trigger",
