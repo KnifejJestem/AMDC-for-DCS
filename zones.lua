@@ -71,3 +71,19 @@ local rene_capture_zone = ZONE_CAPTURE_COALITION:New(rene, coalition.side.RED)
   :SetMarkZone(false)
 
 rene_capture_zone:Start(10, 30)
+
+-- For testing send units to attack Rene
+
+
+
+local rene_attack_unit = SPAWN:NewWithAlias("Ground-1", "Rene Attack Infantry")
+  :InitCleanUp(300)
+  :InitValidateAndRepositionGroundUnits(true)
+
+rene_attack_unit:SpawnFromPointVec3(ZONE:FindByName("rene_attack_spawn"):GetPointVec3())
+  -- :RouteToVec3(rene:GetPointVec3())
+  -- :SetSpeed(20)
+  -- :AddMission(AUFTRAG:NewGROUNDATTACK(GROUP:FindByName("Rene Infantry#001"), 20, ENUMS.Formation.Vehicle.OnRoad))
+
+local lol = OPSGROUP:FindByName("Rene Attack Infantry#001")
+lol:AddMission(AUFTRAG:NewGROUNDATTACK(GROUP:FindByName("Rene Infantry#001"), 20, ENUMS.Formation.Vehicle.OnRoad))
