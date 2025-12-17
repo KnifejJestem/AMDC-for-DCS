@@ -15,6 +15,52 @@ Capture_b_infantry = GROUP:FindByName("capture_b_infantry")
 Capture_r_tank = GROUP:FindByName("capture_r_tank")
 Capture_r_infantry = GROUP:FindByName("capture_r_infantry")
 
+Opszones = { Reneopszone, Beirutopszone, Basselopszone, Hatayopszone }
+Friendlyzones = {}
+
+function GetFriendlyZones(zones)
+    local friendlyzones = {}
+    for _, Opszones in ipairs(zones) do
+        if Opszones:GetOwner() == coalition.side.BLUE then
+            table.insert(friendlyzones, Opszones)
+            table.insert(Friendlyzones, Opszones)
+        end
+    end
+    env.info("Friendly zones found: " .. #friendlyzones)
+    for i, zone in ipairs(friendlyzones) do
+        -- Assuming the Opszone object has a GetName() method
+        env.info("Friendly Zone Name #" .. i .. ": " .. zone:GetName())
+    end
+    return friendlyzones
+end
+
+function CalculateMetersToNM(meters)
+    local nm = meters / 1852
+    return nm
+end
+
+function GetClosestFriendlyZone(initialpoint, friendlyzones)
+    local initialpoint = initialpoint
+    local friendlyzones = Friendlyzones
+    local distance = nil
+    local alldistances = {}
+
+    for _, zone in ipairs(friendlyzones) do
+        local friendlyzonecoordinate = zone:GetCoordinate()
+        local distance = initialpoint:Get2DDistance(friendlyzonecoordinate)
+        local converteddistance = CalculateMetersToNM(distance)
+        if converteddistance < 50 then
+            table.insert(alldistances, distance)
+        end
+    end
+
+    table.sort(alldistances)
+
+    local closestdistance = alldistances[1]
+    return closestdistance
+    
+end
+
 --[[                                                     
                                                        
 █████▄  ▄▄▄▄▄ ▄▄  ▄▄ ▄▄▄▄▄   ██████  ▄▄▄  ▄▄  ▄▄ ▄▄▄▄▄ 
@@ -77,7 +123,14 @@ local rene_tankt90 = SPAWN:NewWithAlias("tank_templatet90", "Rene T-90")
 
 function Reneopszone:OnAfterCaptured(From, Event, To, Coalition)
   if Coalition == coalition.side.BLUE then
-      Ctld:AddCTLDZone("Rene", CTLD.CargoZoneType.UNLOAD, nil, true, false)
+      Ctld:AddCTLDZone("rene", CTLD.CargoZoneType.UNLOAD, nil, true, false)
+
+      GetFriendlyZones(Opszones)
+
+        local renebluecatimer = TIMER:New( function()
+        end)
+
+        renebluecatimer:Start(1, nil, math.random(1400, 2600))
 
       end
   if Coalition == coalition.side.RED then
