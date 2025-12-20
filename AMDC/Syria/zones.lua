@@ -23,6 +23,7 @@ Sa6_template = GROUP:FindByName("sa6_template")
 Sa3_template = GROUP:FindByName("sa3_template")
 Sa10_template = GROUP:FindByName("sa10_template")
 Sa11_template = GROUP:FindByName("sa11_template")
+Ewr_template = GROUP:FindByName("ewr_template")
 Tank_templatet72 = GROUP:FindByName("tank_templatet72")
 Tank_templatet90 = GROUP:FindByName("tank_templatet90")
 Capture_b_tank = GROUP:FindByName("capture_b_tank")
@@ -33,7 +34,15 @@ Capture_r_infantry = GROUP:FindByName("capture_r_infantry")
 Opszones = {}
 Friendlyzones = {}
 Enemyzones = {}
-Samzones = {}
+Samzones = {
+  ZONE:FindByName("sam_zone-1"),
+  ZONE:FindByName("sam_zone-2"),
+  ZONE:FindByName("sam_zone-3"),
+  ZONE:FindByName("sam_zone-4"),
+  ZONE:FindByName("sam_zone-5"),
+  ZONE:FindByName("sam_zone-6"),
+  ZONE:FindByName("sam_zone-7")
+}
 -------------------------------------------------
 -- Zones.lua functions
 -------------------------------------------------
@@ -740,5 +749,104 @@ function Basselopszone:OnAfterCaptured(From, Event, To, Coalition)
       end
       end
 
+--[[                                                   
+                                                       
+▄█████  ▄▄▄  ▄▄   ▄▄   ██████  ▄▄▄  ▄▄  ▄▄ ▄▄▄▄▄  ▄▄▄▄ 
+▀▀▀▄▄▄ ██▀██ ██▀▄▀██    ▄▄▀▀  ██▀██ ███▄██ ██▄▄  ███▄▄ 
+█████▀ ██▀██ ██   ██   ██████ ▀███▀ ██ ▀██ ██▄▄▄ ▄▄██▀ 
+                                                       
+--]]
+
+-- Spawn sams
+
+for i = 1, #Samzones do
+  local samzone = Samzones[i]
+  local sam_type = math.random(1, 5)
+
+  if sam_type == 1 then
+    local sam_sa2 = SPAWN:NewWithAlias("sa2_template", "Red SAM SA-2")
+      :InitCleanUp(600)
+      :InitValidateAndRepositionGroundUnits(true)
+
+    sam_sa2:SpawnFromPointVec3(samzone:GetRandomPointVec3())
+    env.info("Spawning SAM SA-2")
+  end
+  if sam_type == 2 then
+    local sam_sa3 = SPAWN:NewWithAlias("sa3_template", "Red SAM SA-3")
+      :InitCleanUp(600)
+      :InitValidateAndRepositionGroundUnits(true)
+
+    sam_sa3:SpawnFromPointVec3(samzone:GetRandomPointVec3())
+    env.info("Spawning SAM SA-3")
+  end
+  if sam_type == 3 then
+    local sam_sa6 = SPAWN:NewWithAlias("sa6_template", "Red SAM SA-6")
+      :InitCleanUp(600)
+      :InitValidateAndRepositionGroundUnits(true)
+
+    sam_sa6:SpawnFromPointVec3(samzone:GetRandomPointVec3())
+    env.info("Spawning SAM SA-6")
+  end
+  if sam_type == 4 then
+    local sam_sa10 = SPAWN:NewWithAlias("sa10_template", "Red SAM SA-10")
+      :InitCleanUp(600)
+      :InitValidateAndRepositionGroundUnits(true)
+
+    sam_sa10:SpawnFromPointVec3(samzone:GetRandomPointVec3())
+    env.info("Spawning SAM SA-10")
+  end
+  if sam_type == 5 then
+    local sam_sa11 = SPAWN:NewWithAlias("sa11_template", "Red SAM SA-11")
+      :InitCleanUp(600)
+      :InitValidateAndRepositionGroundUnits(true)
+
+    sam_sa11:SpawnFromPointVec3(samzone:GetRandomPointVec3())
+    env.info("Spawning SAM SA-11")
+  end
+  
+end
+
+--[[                                                        
+                                                                   
+██      ▄▄▄ ▄▄▄▄▄▄ ▄▄▄  ▄▄ ▄▄ ▄▄  ▄▄▄    ██████  ▄▄▄  ▄▄  ▄▄ ▄▄▄▄▄ 
+██     ██▀██  ██  ██▀██ ██▄█▀ ██ ██▀██    ▄▄▀▀  ██▀██ ███▄██ ██▄▄  
+██████ ██▀██  ██  ██▀██ ██ ██ ██ ██▀██   ██████ ▀███▀ ██ ▀██ ██▄▄▄ 
+                                                                   
+--]]
+
+local latakia_spawn_zones = {
+  ZONE:FindByName("latakia_spawn-1"),
+  ZONE:FindByName("latakia_spawn-2"),
+  ZONE:FindByName("latakia_spawn-3"),
+  ZONE:FindByName("latakia_spawn-4"),
+  ZONE:FindByName("latakia_spawn-5")
+}
+
+Latakia = ZONE:FindByName("latakia")
+Latakiaopszone = OPSZONE:New(ZONE:FindByName("latakia"), coalition.side.RED)
+Latakiaopszone:Start()
+
+--[[                                                 
+                                                           
+██████ ██     ██ █████▄    ██████  ▄▄▄  ▄▄  ▄▄ ▄▄▄▄▄  ▄▄▄▄ 
+██▄▄   ██ ▄█▄ ██ ██▄▄██▄    ▄▄▀▀  ██▀██ ███▄██ ██▄▄  ███▄▄ 
+██▄▄▄▄  ▀██▀██▀  ██   ██   ██████ ▀███▀ ██ ▀██ ██▄▄▄ ▄▄██▀ 
+                                                           
+--]]
+
+local redewr = SPAWN:NewWithAlias("ewr_template", "Red EWR")
+  :InitCleanUp(600)
+
+redewr:SpawnFromPointVec3(ZONE:FindByName("ewr_zone-1"):GetPointVec3())
+
+
 Opszones = { Reneopszone, Beirutopszone, Basselopszone, Hatayopszone }
-Samzones = {}
+Samzones = {
+  ZONE:FindByName("sam_zone-1"),
+  ZONE:FindByName("sam_zone-2"),
+  ZONE:FindByName("sam_zone-3"),
+  ZONE:FindByName("sam_zone-4"),
+  ZONE:FindByName("sam_zone-5"),
+  ZONE:FindByName("sam_zone-6"),
+  ZONE:FindByName("sam_zone-7")
+}

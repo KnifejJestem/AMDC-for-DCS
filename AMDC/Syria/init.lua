@@ -10,6 +10,7 @@
 
 local zones = [[C:\Users\knife\Desktop\AMDC for DCS\AMDC-for-DCS\zones.lua]]
 local cargo = [[C:\Users\knife\Desktop\AMDC for DCS\AMDC-for-DCS\cargo.lua]]
+local redair = [[C:\Users\knife\Desktop\AMDC for DCS\AMDC-for-DCS\redair.lua]]
 
 
 --[[                                                                                               
@@ -22,3 +23,4 @@ local cargo = [[C:\Users\knife\Desktop\AMDC for DCS\AMDC-for-DCS\cargo.lua]]
 --dofile(zones)
 assert(loadfile(zones))()
 assert(loadfile(cargo))()
+assert(loadfile(redair))()
