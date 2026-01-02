@@ -43,6 +43,19 @@ Samzones = {
   ZONE:FindByName("sam_zone-6"),
   ZONE:FindByName("sam_zone-7")
 }
+
+--[[                                                   
+                                                         
+▄▄   ▄▄  ▄▄▄  ▄▄  ▄▄ ▄▄▄▄▄▄ ▄▄  ▄▄▄▄ 
+██▀▄▀██ ██▀██ ███▄██   ██   ██ ███▄▄ 
+██   ██ ██▀██ ██ ▀██   ██   ██ ▄▄██▀ 
+                                                         
+--]]
+
+Redmantis = MANTIS:New("Red Mantis", "Red SAM", "Red EWR", nil, "red", true)
+Redmantis.autorelocate = true
+Redmantis:Start()
+
 -------------------------------------------------
 -- Zones.lua functions
 -------------------------------------------------
@@ -151,6 +164,7 @@ if Reneopszone == nil then
   BASE:Trace("Rene Opsgrp is nil!")
 end
 Reneopszone:Start()
+local rene_level = 0
 
 -- Draw Rene zone on map
 
@@ -217,6 +231,7 @@ local rene_rpg = SPAWN:NewWithAlias("rpg_template", "Rene RPGs")
 
 -- Rene OnCaptured logic
 function Reneopszone:OnAfterCaptured(From, Event, To, Coalition)
+  -- Red RENE CA
   if Coalition == coalition.side.BLUE then
       Ctld:AddCTLDZone("rene", CTLD.CargoZoneType.UNLOAD, nil, true, false)
       Ctld:ActivateZone("rene", CTLD.CargoZoneType.UNLOAD)
@@ -250,6 +265,28 @@ function Reneopszone:OnAfterCaptured(From, Event, To, Coalition)
 
         reneredcatimer:Start(1, nil, math.random(1400, 2600))
         -- reneredcatimer:Start(1, nil, 1)
+
+      local enemyzones = GetEnemyZones(Opszones)
+      local closezones = GetClosestEnemyZone(Rene, enemyzones)
+      if #closezones > 0 then
+        local rene_level = rene_level + 1
+
+        local renebluecapture = TIMER:New( function()
+          local randomindex = math.random(1, #closezones)
+          local selectedzone = closezones[randomindex]
+          local variablename = selectedzone:GetName() .. "_spawn_ca"
+
+          local rene_blue_capture = SPAWN:NewWithAlias("capture_b_tank", "Rene Blue Capture")
+            :OnSpawnGroup(
+              function( spawned_group )
+                
+              end)
+        end)
+      end
+
+
+
+  -- Blue RENE CA
   if Coalition == coalition.side.RED then
       Ctld:DeactivateZone("Rene", CTLD.CargoZoneType.UNLOAD)
       GetFriendlyZones(Opszones)
@@ -749,6 +786,144 @@ function Basselopszone:OnAfterCaptured(From, Event, To, Coalition)
       end
       end
 
+--[[                                                      
+                                                             
+██     ██ ▄▄ ▄▄   ▄▄  ▄▄▄  ▄▄ ▄▄   ██████  ▄▄▄  ▄▄  ▄▄ ▄▄▄▄▄ 
+██ ▄█▄ ██ ██ ██   ██ ██▀██ ██▄██    ▄▄▀▀  ██▀██ ███▄██ ██▄▄  
+ ▀██▀██▀  ▀███▀ ▄▄█▀ ██▀██ ██ ██   ██████ ▀███▀ ██ ▀██ ██▄▄▄ 
+                                                             
+--]]
+
+local wujah_spawn_zones = {
+  ZONE:FindByName("wujah_spawn-1"),
+  ZONE:FindByName("wujah_spawn-2"),
+  ZONE:FindByName("wujah_spawn-3"),
+  ZONE:FindByName("wujah_spawn-4")
+}
+
+Wujah = ZONE:FindByName("wujah")
+Wujahopszone = OPSZONE:New(ZONE:FindByName("wujah"), coalition.side.RED)
+Wujahopszone:Start()
+
+local wujah_infantry = SPAWN:NewWithAlias("infantry_template", "Wujah Infantry")
+  :InitRandomizeZones(wujah_spawn_zones)
+  :InitCleanUp(300)
+  :InitValidateAndRepositionGroundUnits(true)
+
+  for i = 1, math.random(8, 12) do
+    wujah_infantry:Spawn()
+  end
+
+local wujah_tankt72 = SPAWN:NewWithAlias("tank_templatet72", "Wujah T-72")
+  :InitRandomizeZones(wujah_spawn_zones)
+  :InitCleanUp(300)
+  :InitValidateAndRepositionGroundUnits(true)
+
+  for i = 1, math.random(3, 6) do
+    wujah_tankt72:Spawn()
+  end
+
+local wujah_tankt90 = SPAWN:NewWithAlias("tank_templatet90", "Wujah T-90")
+  :InitRandomizeZones(wujah_spawn_zones)
+  :InitCleanUp(300)
+  :InitValidateAndRepositionGroundUnits(true)
+
+  for i = 1, math.random(2, 4) do
+    wujah_tankt90:Spawn()
+  end
+
+  local wujah_manpads = SPAWN:NewWithAlias("manpad_template", "Wujah Manpads")
+    :InitRandomizeZones(wujah_spawn_zones)
+    :InitCleanUp(300)
+    :InitValidateAndRepositionGroundUnits(true)
+
+  for i = 1, math.random(2, 4) do
+    wujah_manpads:Spawn()
+  end
+
+  local wujah_sa15 = SPAWN:NewWithAlias("sa15_template", "Wujah SA-15")
+    :InitRandomizeZones(wujah_spawn_zones)
+    :InitCleanUp(300)
+    :InitValidateAndRepositionGroundUnits(true)
+
+  for i = 1, math.random(1, 3) do
+    wujah_sa15:Spawn()
+  end
+
+  local wujah_rpg = SPAWN:NewWithAlias("rpg_template", "Wujah RPG")
+    :InitRandomizeZones(wujah_spawn_zones)
+    :InitCleanUp(300)
+    :InitValidateAndRepositionGroundUnits(true)
+
+  for i = 1, math.random(3, 6) do
+    wujah_rpg:Spawn()
+  end
+
+--[[                                                        
+                                                                   
+██      ▄▄▄ ▄▄▄▄▄▄ ▄▄▄  ▄▄ ▄▄ ▄▄  ▄▄▄    ██████  ▄▄▄  ▄▄  ▄▄ ▄▄▄▄▄ 
+██     ██▀██  ██  ██▀██ ██▄█▀ ██ ██▀██    ▄▄▀▀  ██▀██ ███▄██ ██▄▄  
+██████ ██▀██  ██  ██▀██ ██ ██ ██ ██▀██   ██████ ▀███▀ ██ ▀██ ██▄▄▄ 
+                                                                   
+--]]
+
+local latakia_spawn_zones = {
+  ZONE:FindByName("latakia_spawn-1"),
+  ZONE:FindByName("latakia_spawn-2"),
+  ZONE:FindByName("latakia_spawn-3"),
+  ZONE:FindByName("latakia_spawn-4"),
+  ZONE:FindByName("latakia_spawn-5")
+}
+
+Latakia = ZONE:FindByName("latakia")
+Latakiaopszone = OPSZONE:New(ZONE:FindByName("latakia"), coalition.side.RED)
+Latakiaopszone:Start()
+
+local latakia_infantry = SPAWN:NewWithAlias("infantry_template", "Latakia Infantry")
+  :InitRandomizeZones(latakia_spawn_zones)
+  :InitCleanUp(300)
+  :InitValidateAndRepositionGroundUnits(true)
+
+  for i = 1, math.random(8, 12) do
+    latakia_infantry:Spawn()
+  end
+
+  local latakia_manpads = SPAWN:NewWithAlias("manpad_template", "Latakia Manpads")
+    :InitRandomizeZones(latakia_spawn_zones)
+    :InitCleanUp(300)
+    :InitValidateAndRepositionGroundUnits(true)
+
+  for i = 1, math.random(1, 3) do
+    latakia_manpads:Spawn()
+  end
+
+  local latakia_tankt72 = SPAWN:NewWithAlias("tank_templatet72", "Latakia T-72")
+  :InitRandomizeZones(latakia_spawn_zones)
+  :InitCleanUp(300)
+  :InitValidateAndRepositionGroundUnits(true)
+
+  for i = 1, math.random(1, 4) do
+    latakia_tankt72:Spawn()
+  end
+
+local latakia_tankt90 = SPAWN:NewWithAlias("tank_templatet90", "Latakia T-90")
+  :InitRandomizeZones(latakia_spawn_zones)
+  :InitCleanUp(300)
+  :InitValidateAndRepositionGroundUnits(true)
+
+  for i = 1, math.random(0, 2) do
+    latakia_tankt90:Spawn()
+  end
+
+local latakia_rpg = SPAWN:NewWithAlias("rpg_template", "Latakia RPG")
+    :InitRandomizeZones(latakia_spawn_zones)
+    :InitCleanUp(300)
+    :InitValidateAndRepositionGroundUnits(true)
+
+  for i = 1, math.random(2, 5) do
+    latakia_rpg:Spawn()
+  end
+
 --[[                                                   
                                                        
 ▄█████  ▄▄▄  ▄▄   ▄▄   ██████  ▄▄▄  ▄▄  ▄▄ ▄▄▄▄▄  ▄▄▄▄ 
@@ -806,27 +981,7 @@ for i = 1, #Samzones do
   
 end
 
---[[                                                        
-                                                                   
-██      ▄▄▄ ▄▄▄▄▄▄ ▄▄▄  ▄▄ ▄▄ ▄▄  ▄▄▄    ██████  ▄▄▄  ▄▄  ▄▄ ▄▄▄▄▄ 
-██     ██▀██  ██  ██▀██ ██▄█▀ ██ ██▀██    ▄▄▀▀  ██▀██ ███▄██ ██▄▄  
-██████ ██▀██  ██  ██▀██ ██ ██ ██ ██▀██   ██████ ▀███▀ ██ ▀██ ██▄▄▄ 
-                                                                   
---]]
-
-local latakia_spawn_zones = {
-  ZONE:FindByName("latakia_spawn-1"),
-  ZONE:FindByName("latakia_spawn-2"),
-  ZONE:FindByName("latakia_spawn-3"),
-  ZONE:FindByName("latakia_spawn-4"),
-  ZONE:FindByName("latakia_spawn-5")
-}
-
-Latakia = ZONE:FindByName("latakia")
-Latakiaopszone = OPSZONE:New(ZONE:FindByName("latakia"), coalition.side.RED)
-Latakiaopszone:Start()
-
---[[                                                 
+--[[ 
                                                            
 ██████ ██     ██ █████▄    ██████  ▄▄▄  ▄▄  ▄▄ ▄▄▄▄▄  ▄▄▄▄ 
 ██▄▄   ██ ▄█▄ ██ ██▄▄██▄    ▄▄▀▀  ██▀██ ███▄██ ██▄▄  ███▄▄ 
@@ -834,13 +989,24 @@ Latakiaopszone:Start()
                                                            
 --]]
 
+Ewrzones = {
+  ZONE:FindByName("ewr_zone-1"),
+  ZONE:FindByName("ewr_zone-2"),
+  ZONE:FindByName("ewr_zone-3"),
+  ZONE:FindByName("ewr_zone-4"),
+  ZONE:FindByName("ewr_zone-5")
+}
+
 local redewr = SPAWN:NewWithAlias("ewr_template", "Red EWR")
   :InitCleanUp(600)
 
-redewr:SpawnFromPointVec3(ZONE:FindByName("ewr_zone-1"):GetPointVec3())
+for i=1, 5 do
+  local selected_zone = Ewrzones[i]
+  redewr:SpawnFromPointVec3(selected_zone:GetRandomPointVec3())
+end
 
 
-Opszones = { Reneopszone, Beirutopszone, Basselopszone, Hatayopszone }
+Opszones = { Reneopszone, Beirutopszone, Basselopszone, Hatayopszone, Wujahopszone, Latakiaopszone }
 Samzones = {
   ZONE:FindByName("sam_zone-1"),
   ZONE:FindByName("sam_zone-2"),
